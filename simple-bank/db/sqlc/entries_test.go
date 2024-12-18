@@ -5,6 +5,7 @@ import (
 	"github.com/DamThiLanAnh/simple-bank/util"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 func createRandomEntry(t *testing.T, account Account) Entry {
@@ -30,11 +31,36 @@ func TestCreateEntry(t *testing.T) {
 	createRandomEntry(t, account)
 }
 
-//func TestGetEntry(t *testing.T) {
-//	account := creatRandomAccount(t)
-//	account2, err := testStore.GetEntries(context.Background(), account1.ID)
-//}
-//
-//func TestListEntry(t *testing.T) {
-//
-//}
+func TestGetEntry(t *testing.T) {
+	account := creatRandomAccount(t)
+	entry1 := createRandomEntry(t, account)
+	entry2, err := testStore.GetEntries(context.Background(), entry1.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, entry2)
+
+	require.Equal(t, entry1.ID, entry2.ID)
+	require.Equal(t, entry1.AccountID, entry2.AccountID)
+	require.Equal(t, entry1.Amount, entry2.Amount)
+
+	require.WithinDuration(t, entry1.CreatedAt, entry2.CreatedAt, time.Second)
+}
+
+func TestListEntry(t *testing.T) {
+	account := creatRandomAccount(t)
+	for i := 0; i < 10; i++ {
+		createRandomEntry(t, account)
+	}
+
+	arg := ListEntriesParams{
+		Limit:  5,
+		Offset: 5,
+	}
+
+	entries, err := testStore.ListEntries(context.Background(), arg)
+	require.NoError(t, err)
+	require.Len(t, entries, 5)
+
+	for _, entry := range entries {
+		require.NotEmpty(t, entry)
+	}
+}
