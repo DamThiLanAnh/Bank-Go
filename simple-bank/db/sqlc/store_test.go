@@ -44,14 +44,14 @@ func TestTransferTx(t *testing.T) {
 		transfer := result.Transfer
 		require.NotEmpty(t, transfer)
 		require.Equal(t, account1.ID, transfer.FromAccountID)
-		require.Equal(t, account2.ID, transfer.FromAccountID)
+		require.Equal(t, account2.ID, transfer.ToAccountID)
 		require.Equal(t, amount, transfer.Amount)
 		require.NotZero(t, transfer.ID)
 		require.NotZero(t, transfer.CreatedAt)
 
 		//Dam bao rang transfer record dc tao trong csdl
 		_, err = store.GetTransfer(context.Background(), transfer.ID)
-		require.NotZero(t, err)
+		require.NoError(t, err)
 
 		// check entries
 		fromEntry := result.FromEntry
@@ -66,7 +66,7 @@ func TestTransferTx(t *testing.T) {
 
 		toEntry := result.ToEntry
 		require.NotEmpty(t, toEntry)
-		require.Equal(t, account1.ID, toEntry.AccountID)
+		require.Equal(t, account2.ID, toEntry.AccountID)
 		require.Equal(t, amount, toEntry.Amount) //because money is going in
 		require.NotZero(t, toEntry.ID)
 		require.NotZero(t, toEntry.CreatedAt)

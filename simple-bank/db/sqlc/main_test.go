@@ -17,6 +17,7 @@ const (
 
 var testQueries *Queries
 var testDB *sql.DB
+var testStore *Store
 
 func TestMain(m *testing.M) {
 	var err error
@@ -24,8 +25,8 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal("cannot connect to db: ", err)
 	}
-
 	testQueries = New(testDB)
+	testStore = NewStore(testDB)
 
 	os.Exit(m.Run())
 }
