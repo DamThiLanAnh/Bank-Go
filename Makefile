@@ -12,5 +12,8 @@ sqlc:
 	sqlc generate
 test:
 	go test -v -cover ./...
-.PHONY: postgress, createdb, dropdb, migrateup, migratedown, sqlc, test
-
+turnOn:
+	docker start fefe0dc92ca1
+turnOff:
+	docker stop fefe0dc92ca1
+.PHONY: postgress, createdb, dropdb, migrateup, migratedown, sqlc, test, turnOn, turnOff

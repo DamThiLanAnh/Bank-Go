@@ -16,7 +16,7 @@ func TestTransferTx(t *testing.T) {
 	n := 5
 	amount := int64(10)
 
-	//using chanel to connect concurrency gorotine
+	//using chanel to connect concurrency goroutine
 	errs := make(chan error)
 	results := make(chan TransferTxResult)
 
@@ -49,7 +49,7 @@ func TestTransferTx(t *testing.T) {
 		require.NotZero(t, transfer.ID)
 		require.NotZero(t, transfer.CreatedAt)
 
-		//Dam bao rang transfer record dc tao trong csdl
+		// Dam bao rang transfer record dc tao trong csdl
 		_, err = store.GetTransfer(context.Background(), transfer.ID)
 		require.NoError(t, err)
 
